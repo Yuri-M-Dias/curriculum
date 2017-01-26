@@ -1,0 +1,159 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Plasmati Graduate CV
+% LaTeX Template
+% Version 1.0 (24/3/13)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% Alessandro Plasmati (alessandro.plasmati@gmail.com)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+% Important note:
+% This template needs to be compiled with XeLaTeX.
+% The main document font is called Fontin and can be downloaded for free
+% from here: http://www.exljbris.com/fontin.html
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[a4paper,10pt]{article} % Default font size and paper size
+
+\usepackage{fontspec} % For loading fonts
+\defaultfontfeatures{Mapping=tex-text}
+\setmainfont[SmallCapsFont = Fontin SmallCaps]{Fontin} % Main document font
+
+\usepackage{xunicode,xltxtra,url,parskip} % Formatting packages
+
+\usepackage[usenames,dvipsnames]{xcolor} % Required for specifying custom colors
+
+\usepackage[big]{layaureo} % Margin formatting of the A4 page, an alternative to layaureo can be \usepackage{fullpage}
+% To reduce the height of the top margin uncomment: \addtolength{\voffset}{-1.3cm}
+
+\usepackage{hyperref} % Required for adding links	and customizing them
+\definecolor{linkcolour}{rgb}{0,0.2,0.6} % Link color
+\hypersetup{colorlinks,breaklinks,urlcolor=linkcolour,linkcolor=linkcolour} % Set link colors throughout the document
+
+\usepackage{titlesec} % Used to customize the \section command
+\titleformat{\section}{\Large\scshape\raggedright}{}{0em}{}[\titlerule] % Text formatting of sections
+\titlespacing{\section}{0pt}{3pt}{3pt} % Spacing around sections
+
+\usepackage{fontawesome} % Fontawesome for icons
+
+\begin{document}
+
+\pagestyle{empty} % Removes page numbering
+
+\font\fb=''[cmr10]'' % Change the font of the \LaTeX command under the skills section
+
+%----------------------------------------------------------------------------------------
+%	NAME AND CONTACT INFORMATION
+%----------------------------------------------------------------------------------------
+
+\par{\centering{\Huge Yuri Matheus Dias Pereira}\bigskip\par} % Your name
+
+\section{Dados pessoais}
+
+\begin{tabular}{rl}
+	\href{mailto:yurimathe.yp@gmail.com}{yurimathe.yp@gmail.com}
+	& \faGithub
+	\href{https://github.com/Yuri-M-Dias}{\bf https://github.com/Yuri-M-Dias} \\
+	\faStackOverflow \href{http://stackoverflow.com/users/3312701/yuri-m-dias}
+	{\bf StackOverflow}
+	& \href{https://github.com/Yuri-M-Dias}{\bf Yuri-M-Dias} \\
+	& Desenvolvedor Júnior/Engenheiro de Software. \\
+\end{tabular}
+
+%----------------------------------------------------------------------------------------
+%	WORK EXPERIENCE
+%----------------------------------------------------------------------------------------
+
+\section{Formação Acadêmica}
+
+\begin{tabular}{r|p{11cm}}
+	\emph{Bacharelado} & Engenharia de Software \\
+	& \emph{Instituto de Informática} da \emph{Universidade Federal de Goiás} \\
+	& Término: 2016\\
+\end{tabular}
+
+%----------------------------------------------------------------------------------------
+%	EDUCATION
+%----------------------------------------------------------------------------------------
+
+\section{Experiência com Desenvolvimento}
+
+\begin{tabular}{rl}
+	\textsc{Agosto} 2013 - & Bolsa Jovens Talentos CNPQ\\
+	\textsc{Julho} 2014 & Desenvolvimento de uma aplicação LabWiki\\
+	& Desenvolvimento de uma aplicação LabWiki para a aplicação LABORA. \\
+	& Orientado pela professora Dra. Sand Luz Correa. Feito utilizando \\
+	& Ruby on Rails, JavaScript, HTML e CSS. O objetivo da aplicação  \\
+	& era a geração de um script em OEDL automaticamente, dada a \\
+	& orientação dos nodos disponibilizados na página, com o seu ip. \\
+	& \href{https://github.com/Yuri-M-Dias/LabWiki}{\bf Aplicação postada no GitHub} \\
+	& \\
+	\textsc{Agosto} 2013 - & Outros projetos desenvolvidos para a faculdade \\
+	\textsc{Julho} 2015 &
+	\href{https://bitbucket.org/Yuri-M-Dias/projeto-3/overview}
+	{\bf Concorrência com SQLite em C usando API do UNIX.} \\
+	& \href{https://github.com/Yuri-M-Dias/JavaBattleship}{\bf Jogo de Batalha Naval feito em Java com Design Patterns.}
+
+\end{tabular}
+
+
+
+%----------------------------------------------------------------------------------------
+%	LANGUAGES
+%----------------------------------------------------------------------------------------
+
+\section{Idiomas}
+
+\begin{tabular}{rl}
+	\textsc{Inglês:} & Fluente, formação pelo You Get It!\\
+	\textsc{Francês:} & Conhecimento básico, cursei até o Francês III no Centro de Línguas UFG\\
+\end{tabular}
+
+%----------------------------------------------------------------------------------------
+%	COMPUTER SKILLS
+%----------------------------------------------------------------------------------------
+
+\section{Qualificações}
+
+\begin{tabular}{rl}
+	\textsc{Conhecimento básico:} & PHP, CSS, \LaTeX\\
+
+	Conhecimento intermediário: & Java Standard Edition, Python 3.x, Ruby, C\\
+	& JavaScript e HTML5\\
+
+	Banco de Dados: & PostgreSQL, MySQL e SQLite. \\
+
+	IDEs: & Eclipse, Sublime Text 2 e Spyder. \\
+
+	Frameworks: & Ruby on Rails, JQuery, Bootstrap e Flask. \\
+
+\end{tabular}
+
+%----------------------------------------------------------------------------------------
+%	SCHOLARSHIPS AND ADDITIONAL INFO
+%----------------------------------------------------------------------------------------
+
+\section{Atividades complementares}
+
+\begin{tabular}{rl}
+	2013 & $10^{\circ}$ Fórum Goiânia de Software Live(FGSL) e \\
+	& $1^{a}$ Escola Regional de Informática de Goiás(ERI-GO)\\
+
+	2014 & $11^{\circ}$ Fórum Goiânia de Software Live(FGSL) e \\
+	& $2^{a}$ Escola Regional de Informática de Goiás(ERI-GO)\\
+
+	2014 & Google Developers Group (GDG) DevFest Goiânia 2014\\
+\end{tabular}
+
+
+\end{document}
