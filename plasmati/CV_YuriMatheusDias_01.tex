@@ -50,12 +50,18 @@
 %\usepackage[T1]{fontenc}
 
 % Language support. Doesn't seeem necessary for now.
-%\usepackage[english,brazil]{babel} % For standard latex
+\usepackage[english,brazil]{babel} % For standard latex
 %\usepackage[]{polyglossia} % Xetex's babel
 %\setdefaultlanguage[]{brazil}
-%\selectlanguage{english}
 
-\usepackage{cite} % Bibtex citations
+
+% Uncomment to generate a pt or en version
+
+%\selectlanguage{english}
+%\input{i18n/cv_en.tex}
+
+\selectlanguage{brazil}
+\input{i18n/cv_pt.tex}
 
 \begin{document}
 
@@ -69,7 +75,7 @@
 
 \par{\centering{\Huge Yuri Matheus Dias Pereira}\bigskip\par} % Your name
 
-\section{Dados pessoais}
+\section{\personalDataSection}
 
 \begin{tabular}{clll}
 
@@ -78,32 +84,28 @@
 	& \faEnvelopeO \thinspace \href{mailto:yurimathe.yp@gmail.com}{Gmail}
 	& \faLinkedin \thinspace \href{https://www.linkedin.com/in/yuri-pereira-b5b589a8/}{LinkedIn} \\
 
-	\bf Objetivos: & Desenvolvedor Júnior & | Engenheiro de Software & \\
+	\bf \objectives: & \juniorDeveloper & | \softwareEngineer & \\
 \end{tabular}
 
 %----------------------------------------------------------------------------------------
 %	WORK EXPERIENCE
 %----------------------------------------------------------------------------------------
 
-\section{Experiência Profissional}
+\section{\workExperienceSection}
 
-\begin{tabular}{r|l}
+\begin{tabular}{r|p{11cm}}
 
-	\textbf{Setembro 2016} - & \textbf{ZG Soluções}\\
-	\textbf{Janeiro 2017} & Estagiário em Desenvolvimento Web \\
-	& Encarregado de realizar manutenções e construir novas\\
-	& funcionalidades para a aplicação principal da empresa.\\
-	& Nós definimos uma estrutura de testes e de integração contínua.\\
-	& O ambiente seguia a metodologia ágil.\\
-	& \textbf{Tecnologias:} Gradle, Groovy, Grails, GORM, JavaScript, ExtJs, \\
-	& Cucumber, Jenkins, Docker, Linux, HTML5 e CSS. \\
+	\textbf{\september \thinspace 2016} - & \textbf{\zgSolutions}\\
+	\textbf{\january \thinspace 2017} & \emph{\webDevelopmentIntern} \\
+	& \ZGDescription \\
+	& \textbf{\technologies:} Gradle, Groovy, Grails, GORM, JavaScript, ExtJs,
+	Cucumber, Jenkins, Docker, Linux, HTML5 \andWord CSS. \\
 
-	\textbf{Agosto 2015} - & \textbf{DCM Serviços de tecnologia} \\
-	\textbf{Agosto 2016} & Estagiário em Desenvolvimento Web \\
-	& Encarregado de realizar a atualização da aplicação legado para \\
-	& utilizar novas tecnologias web. \\
-	& \textbf{Tecnologias:} Maven, Java, JavaScript, ExtJs, AngularJS 1.x, \\
-	& Spring, Apache Tomcat, Hibernate e PostgreSQL. \\
+	\textbf{\august \thinspace 2015} - & \textbf{\DCMServices} \\
+	\textbf{\august \thinspace 2016} & \emph{\webDevelopmentIntern} \\
+	& \DCMDescription \\
+	& \textbf{\technologies:} Maven, Java, JavaScript, ExtJs, AngularJS 1.x,
+	Spring, Apache Tomcat, Hibernate \andWord PostgreSQL. \\
 
 \end{tabular}
 
@@ -111,33 +113,36 @@
 %	EDUCATION
 %----------------------------------------------------------------------------------------
 
-\section{Formação Acadêmica}
+\section{\educationSection}
 
 \begin{tabular}{r|p{11cm}}
-	\emph{Bacharelado} & Engenharia de Software \\
-	& \emph{Instituto de Informática} da \emph{Universidade Federal de Goiás} \\
-	& Término: 2016\\
+	\emph{\bachelorDegree} & \softwareEngineering \\
+	& \emph{\INF} \daOf \emph{\UFG} \\
+	& \finishEducation: 2016\\
 \end{tabular}
 
 %----------------------------------------------------------------------------------------
 %	COLLEGE PROJECTS
 %----------------------------------------------------------------------------------------
 
-\section{Projetos da Faculdade}
+\section{\collegeProjectsSection}
 
-\begin{tabular}{rl}
-	Responsável por DevOps: &
-	\href{https://github.com/SaladaDeFrutas/Pitanga}{Pitanga} (Spring e Sonar) \\
-	Responsável por Integração: &
-	\href{https://github.com/ES-INF-UFG-2016-2/Sempre-UFG}{SempreUFG} (JavaEE e Maven)\\
-	Conceitos em Android: &
-	\href{https://github.com/Yuri-M-Dias/HomeShop}{HomeShop} e
+\begin{tabular}{rp{11cm}}
+	\devOpsResponsible: &
+	\href{https://github.com/SaladaDeFrutas/Pitanga}{Pitanga}
+	(Spring, Sonar) \\
+	\integrationResponsible: &
+	\href{https://github.com/ES-INF-UFG-2016-2/Sempre-UFG}{SempreUFG}
+	(JavaEE, Maven)\\
+	\androidConcepts: &
+	\href{https://github.com/Yuri-M-Dias/HomeShop}{HomeShop} \andWord
 	\href{https://github.com/Yuri-M-Dias/HealthHelp}{HealthHelp} \\
-	Visualização de dados: &
+	\dataVisualization: &
 	\href{https://github.com/Yuri-M-Dias/meteorites}{Meteorites} (R) \\
-	Responsável por V\&V: &
-	\href{https://bitbucket.org/SysRadocTeam/sysradoc}{SysRadoc} (NodeJS) \\
-	Implementação de API: &
+	\verificationAndValidationResponsible: &
+	\href{https://bitbucket.org/SysRadocTeam/sysradoc}{SysRadoc}
+	(NodeJS) \\
+	\apiImplementation: &
 	\href{https://github.com/Yuri-M-Dias/SAEP}{SAEP} (MongoDB) \\
 
 \end{tabular}
@@ -146,16 +151,18 @@
 %	RESEARCH PROJECTS
 %----------------------------------------------------------------------------------------
 
-\section{Projetos de Pesquisa}
+\section{\researchProjectsSection}
 
-\begin{tabular}{rl}
+\begin{tabular}{rp{11cm}}
 
-	Interação e IHC: &
-	\href{https://siimi.medialab.ufg.br/up/777/o/49_cubos_interativos.pdf}{Programação Visual para o $C^3$} (JavaFX e Arduino)\\
-	Integração com a RNP: &
+	\interactionAndIHC: &
+	\href{https://siimi.medialab.ufg.br/up/777/o/49_cubos_interativos.pdf}
+		{\CThreeTitle} (JavaFX, Arduino)\\
+	\RNPIntegration: &
 	\href{https://github.com/Yuri-M-Dias/LabWiki}{LabWiki} (Ruby on Rails) \\
-	Aprendizado de Máquina: &
-	\href{https://gist.github.com/Yuri-M-Dias/d7b69fd8bc873cdf6029af5dcb5a8a0f}{NNth} (Python)\\
+	\machineLearning: &
+	\href{https://gist.github.com/Yuri-M-Dias/d7b69fd8bc873cdf6029af5dcb5a8a0f}
+		{NNth} (Python)\\
 
 \end{tabular}
 
@@ -163,13 +170,13 @@
 %	LANGUAGES
 %----------------------------------------------------------------------------------------
 
-\section{Idiomas}
+\section{\languagesSection}
 
-\begin{tabular}{rl}
+\begin{tabular}{rp{11cm}}
 
-	\textsc{Inglês:} & Fluente, formação pelo You Get It! (TOEFL ITP 606)\\
+	\textsc{\english:} & \englishDescription \\
 
-	\textsc{Francês:} & Conhecimento básico, Francês III no Centro de Línguas UFG (CEFR A2)\\
+	\textsc{\french:} & \frenchDescription \\
 
 \end{tabular}
 
