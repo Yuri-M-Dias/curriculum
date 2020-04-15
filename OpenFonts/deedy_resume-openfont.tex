@@ -1,0 +1,245 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Deedy - One Page Two Column Resume
+% LaTeX Template
+% Version 1.2 (16/9/2014)
+%
+% Original author:
+% Debarghya Das (http://debarghyadas.com)
+%
+% Original repository:
+% https://github.com/deedydas/Deedy-Resume
+%
+% IMPORTANT: THIS TEMPLATE NEEDS TO BE COMPILED WITH XeLaTeX
+%
+% This template uses several fonts not included with Windows/Linux by
+% default. If you get compilation errors saying a font is missing, find the line
+% on which the font is used and either change it to a font included with your
+% operating system or comment the line out to use the default font.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% TODO:
+% 1. Integrate biber/bibtex for article citation under publications.
+% 2. Figure out a smoother way for the document to flow onto the next page.
+% 3. Add styling information for a "Projects/Hacks" section.
+% 4. Add location/address information
+% 5. Merge OpenFont and MacFonts as a single sty with options.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% CHANGELOG:
+% v1.1:
+% 1. Fixed several compilation bugs with \renewcommand
+% 2. Got Open-source fonts (Windows/Linux support)
+% 3. Added Last Updated
+% 4. Move Title styling into .sty
+% 5. Commented .sty file.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Known Issues:
+% 1. Overflows onto second page if any column's contents are more than the
+% vertical limit
+% 2. Hacky space on the first bullet point on the second column.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\documentclass[]{deedy-resume-openfont}
+\usepackage{fancyhdr}
+\usepackage{fontawesome} % Fontawesome for icons
+
+%\usepackage[T1]{fontenc}
+%\usepackage[utf8]{inputenc}
+\usepackage{hyperref} % Required for adding links	and customizing them
+\definecolor{linkcolour}{rgb}{0,0.2,0.6} % Link color
+\hypersetup{colorlinks,breaklinks,urlcolor=linkcolour,linkcolor=linkcolour}
+
+\pagestyle{fancy}
+% ADD THE FOLLOWING COUPLE LINES INTO YOUR PREAMBLE
+\let\OLDthebibliography\thebibliography
+\renewcommand\thebibliography[1]{
+  \OLDthebibliography{#1}
+  \setlength{\parskip}{0pt}
+  \setlength{\itemsep}{0pt plus 0.3ex}
+}
+\fancyhf{}
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%     LAST UPDATED DATE
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\lastupdated
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%     TITLE NAME
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\namesection{Yuri Matheus Dias}{Pereira}{
+\href{mailto:yurimathe.yp@gmail.com}{yurimathe.yp@gmail.com} |
+\href{mailto:yuri.pereira@inpe.br}{yuri.pereira@inpe.br} \\
+São José dos Campos, State of São Paulo, Brazil
+\bigskip | \faBirthdayCake \bigskip 07/08/1995 % If birthdate necessary
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%     COLUMN ONE
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{minipage}[t]{0.33\textwidth}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%     EDUCATION
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Education}
+
+\subsection{National Institute \newline for Space Research (INPE)}
+\descript{MSc in Engineering and Management of Space Systems}
+\location{Mar 2018 - Ongoing |\newline São José dos Campos, BR}
+
+\sectionsep
+
+\subsection{Federal University\newline of Goiás (UFG)}
+\descript{BSc in Software Engineering}
+\location{Dec 2017 | Goiânia, BR}
+\sectionsep
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%     LINKS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Links}
+\faGithub \thinspace \href{https://github.com/Yuri-M-Dias}{\bf GitHub: \textit{Yuri-M-Dias}} \\
+\faStackOverflow \thinspace
+\href{http://stackoverflow.com/users/story/3312701}{\bf StackOverflow} \\
+\faLinkedin \thinspace
+\href{https://www.linkedin.com/in/yuri-pereira-b5b589a8/}{\bf LinkedIn}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%     SKILLS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Skills}
+\subsection{Software}
+\location{Professional experience:}
+Java \textbullet{} Groovy \textbullet{} JavaScript + NodeJS \textbullet{} \\
+Grails \textbullet{} Bash \textbullet{} Ruby on Rails \textbullet{} Meteor \textbullet{} \\
+Angular 1.x \textbullet{} Maven \textbullet{} Docker \textbullet{} Git \textbullet{} R \\
+\location{Projects built:}
+C \textbullet{} C++ \textbullet{} CSS \textbullet{} Android \textbullet{} Arduino \\
+Python \textbullet{} Unity \textbullet{} \LaTeX \textbullet{} Tomcat \\
+ReactJS \textbullet{} AdonisJS \\
+\location{Familiar/Hobby:}
+Rust \textbullet{} VimL \textbullet{} FishShell
+\sectionsep
+
+\subsection{Space Systems}
+\location{Coursework:}
+Introduction to Satellite Communications \\
+Concepts and Systems for Spacecraft Operations \\
+Space Data Systems \\
+Data Science Algorithms
+\sectionsep
+
+\subsection{Languages}
+\location{English: Fluent, TOEFL IBT 107 @ 2017}
+\location{French: Intermediate}
+\location{Japanese: JLPT N5 @ 2019}
+\location{Portuguese: Native}
+\sectionsep
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%     COLUMN TWO
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.66\textwidth}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%     EXPERIENCE
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Professional Experience}
+\runsubsection{MediaLab/UFG}
+\descript{| Software Engineer}
+\location{Jul 2017 - Jan 2018 | Goiânia, BR}
+\vspace{\topsep} % Hacky fix for awkward extra vertical space
+\begin{tightemize}
+\item Researched an Augmented Reality experience for the Cora Coralina Museum.
+\item Continued development of a Meteor application to train UFG HR department on campus' laws using gamification.
+\end{tightemize}
+
+\runsubsection{Fitsmind}
+\descript{| Software Engineering Intern}
+\location{Apr 2017 – Jun 2017 | Remote, based in Norway}
+\vspace{0pt}
+\begin{tightemize}
+\item Lead an effort to add TDD practices and a testing structure for the main application.
+\item Part of the full-stack development team on Ruby on Rails and Angular.
+\end{tightemize}
+
+\runsubsection{ZG Soluções}
+\descript{| Software Engineering Intern}
+\location{Sep 2016 – Fev 2017 | Goiânia, BR}
+\vspace{0pt}
+\begin{tightemize}
+\item Part of the development team for one section of the main application, working with Grails and doing full stack work.
+\item Led an effort to update testing for the main application using Cucumber and Selenium, focused on business rules.
+\end{tightemize}
+
+\runsubsection{i9 Tecnologia}
+\descript{| Software Engineering Intern}
+\location{Aug 2015 – Aug 2016 | Goiânia, BR}
+\vspace{0pt}
+\begin{tightemize}
+\item Worked on updating the accounting application to use newer technologies and abstractions, using Spring and Java 8.
+\item Modeled the business relationships in an UML system (Astah).
+\end{tightemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%     RESEARCH
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Research}
+\runsubsection{INPE}
+\descript{| Full time Master's Student}
+\location{Mar 2018 – Ongoing | São José dos Campos, BR}
+Working on Data Analysis tools and algorithms to support spacecraft operators at the Satellite Control Center (CCS), doing research on Big Data for Satellite Operations.
+Awarded a CAPES scholarship for full time dedication.
+\sectionsep
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%     PUBLICATIONS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Publications}
+\vspace{15pt}
+\renewcommand\refname{\vskip -1.5cm} % Couldn't get this working from the .cls file
+\bibliographystyle{acm}
+\bibliography{publications}
+\nocite{*}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%     AWARDS, volunteer work in my case...
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Volunteer work}
+\begin{tabular}{cp{10cm}}
+2020 & Organizer at the \href{http://www.inpe.br/cubedesign/2020/}{III CubeDesign} competition, responsible for Data Science and software to run the competition \\
+2019 - 2020 & Weekly volunteer at the DCTA Astronomical Observatory \\
+2019 & Organizer at the II CubeDesign competition, responsible for data management and CanSat payload operations\\
+2019 & Organizer at the Workshop of Engineering and Space Technology (WETE) \\
+\end{tabular}
+
+\end{minipage}
+\end{document}
