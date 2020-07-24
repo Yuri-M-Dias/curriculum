@@ -30,7 +30,7 @@
 
 % Date command
 \usepackage[absolute]{textpos}
-\usepackage[UKenglish]{isodate}
+\usepackage[style=iso]{datetime2}
 \setlength{\TPHorizModule}{1mm}
 \setlength{\TPVertModule}{1mm}
 \newcommand{\lastupdated}{\begin{textblock}{60}(155,5)
