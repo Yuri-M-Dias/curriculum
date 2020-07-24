@@ -37,6 +37,10 @@
 \color{date}\fontspec[Path = fonts/raleway/]{Raleway-ExtraLight}\fontsize{8pt}{10pt}\selectfont 
 Last Updated on \today
 \end{textblock}}
+\newcommand{\ultimaatualizacao}{\begin{textblock}{60}(155,5)
+\color{date}\fontspec[Path = fonts/raleway/]{Raleway-ExtraLight}\fontsize{8pt}{10pt}\selectfont 
+Ultima atualização \today
+\end{textblock}}
 
 % Name command
 \newcommand{\namesection}[3]{

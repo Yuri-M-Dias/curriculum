@@ -66,6 +66,11 @@
 }
 \fancyhf{}
 
+% English translation
+\input{i18n/cv_en.tex}
+% Portuguese translation
+%\input{i18n/cv_pt.tex}
+
 \begin{document}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -81,9 +86,10 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \namesection{Yuri Matheus Dias}{Pereira}{
-\href{mailto:yurimathe.yp@gmail.com}{yurimathe.yp@gmail.com} |
-\href{mailto:yuri.pereira@inpe.br}{yuri.pereira@inpe.br} \\
-São José dos Campos, State of São Paulo, Brazil \thinspace
+\href{mailto:yurimathe.yp@gmail.com}{yurimathe.yp@gmail.com}
+%| \href{mailto:yuri.pereira@inpe.br}{yuri.pereira@inpe.br}
+\\
+São José dos Campos, São Paulo, Brazil \thinspace
 | \faBirthdayCake \thinspace 07/08/1995 % If birthdate necessary
 \\
 \href{https://github.com/Yuri-M-Dias}{\faGithub\thinspace \textit{Yuri-M-Dias}} |
@@ -105,49 +111,45 @@ São José dos Campos, State of São Paulo, Brazil \thinspace
 %     EDUCATION
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Education}
+\section{\education}
 
-\subsection{MS Space Engineering \newline and Technology}
-\descript{National Institute \newline for Space Research (INPE)}
-\location{Mar 2018 - Ongoing |\newline São José dos Campos, BR}
-Area: Space Systems Engineering and Management
+\subsection{\educationMSName}
+\descript{\educationMSLocation}
+\location{\educationMSDuration}
+\educationMSArea
 \sectionsep
 
-\subsection{BS Software \newline Engineering}
-\descript{Federal University\newline of Goiás (UFG)}
-\location{Dec 2017 | Goiânia, BR}
+\subsection{\educationBSName}
+\descript{\educationBSLocation}
+\location{\educationBSDuration}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %     SKILLS
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Skills}
-\subsection{Software}
-\location{Professional experience:}
+\section{\skills}
+\subsection{\software}
+\location{\softwareProfessional:}
 Java \textbullet{} Groovy \textbullet{} JavaScript + NodeJS \textbullet{} \\
 Grails \textbullet{} Bash \textbullet{} Ruby on Rails \textbullet{} Meteor \textbullet{} \\
-Angular 1.x \textbullet{} Maven \textbullet{} Docker \textbullet{} Git \textbullet{} R \\
-\location{Projects built:}
+Angular \textbullet{} Maven \textbullet{} Docker \textbullet{} Git \textbullet{} R \\
+\location{\softwareProjects:}
 C \textbullet{} C++ \textbullet{} CSS \textbullet{} Android \textbullet{} Arduino \\
-Python \textbullet{} Unity \textbullet{} \LaTeX \textbullet{} Tomcat \\
-ReactJS \textbullet{} AdonisJS \\
-\location{Familiar/Hobby:}
+Python \textbullet{} \LaTeX \textbullet{} Tomcat \textbullet{} ReactJS \textbullet{} \\
+AdonisJS \\
+\location{\softwareHobby:}
 Rust \textbullet{} VimL \textbullet{} FishShell
 \sectionsep
 
-\subsection{Languages}
-\location{English: Fluent, TOEFL IBT 107 @ 2017}
-\location{French: Intermediate}
-\location{Japanese: JLPT N5 @ 2019}
-\location{Portuguese: Native}
+\subsection{\languages}
+\location{\languagesEN}
+\location{\languagesFR}
+\location{\languagesJP}
+\location{\languagesPT}
 
-\section{Coursework}
-\subsection{Space Systems}
-\location{Coursework:}
-Introduction to Satellite Communications \\
-Concepts and Systems for Spacecraft Operations \\
-Space Data Systems \\
-Data Science Algorithms
+\section{\coursework}
+\subsection{\courseworkSub}
+\courses
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
@@ -163,60 +165,47 @@ Data Science Algorithms
 %     EXPERIENCE
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Professional Experience}
+\section{\professional}
 \runsubsection{MediaLab/UFG}
-\descript{| Software Engineer}
-\location{Jul 2017 - Jan 2018 | Goiânia, BR}
+\descript{| \professionalSWE}
+\location{\professionalMLDur}
 \vspace{\topsep} % Hacky fix for awkward extra vertical space
-\begin{tightemize}
-\item Researched an Augmented Reality experience for the Cora Coralina Museum.
-\item Continued development of a Meteor application to train UFG HR department on campus' laws using gamification.
-\end{tightemize}
+\professionalMLDesc
 
 \runsubsection{Fitsmind}
-\descript{| Software Engineering Intern}
-\location{Apr 2017 – Jun 2017 | Remote, based in Norway}
+\descript{| \professionalSWEI}
+\location{\professionalFTDur}
 \vspace{0pt}
-\begin{tightemize}
-\item Lead an effort to add TDD practices and a testing structure for the main application.
-\item Part of the full-stack development team on Ruby on Rails and Angular.
-\end{tightemize}
+\professionalFTDesc
 
 \runsubsection{ZG Soluções}
-\descript{| Software Engineering Intern}
-\location{Sep 2016 – Fev 2017 | Goiânia, BR}
+\descript{| \professionalSWEI}
+\location{\professionalZGDur}
 \vspace{0pt}
-\begin{tightemize}
-\item Part of the development team for one section of the main application, working with Grails and doing full stack work.
-\item Led an effort to update testing for the main application using Cucumber and Selenium, focused on business rules.
-\end{tightemize}
+\professionalZGDesc
 
 \runsubsection{i9 Tecnologia}
-\descript{| Software Engineering Intern}
-\location{Aug 2015 – Aug 2016 | Goiânia, BR}
+\descript{| \professionalSWEI}
+\location{\professionalINDur}
 \vspace{0pt}
-\begin{tightemize}
-\item Worked on updating the accounting application to use newer technologies and abstractions, using Spring and Java 8.
-\item Modeled the business relationships in an UML system (Astah).
-\end{tightemize}
+\professionalINDesc
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %     RESEARCH
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Research}
+\section{\research}
 \runsubsection{INPE}
-\descript{| Full time Master's Student}
-\location{Mar 2018 – Ongoing | São José dos Campos, BR}
-Working on Data Analysis tools and algorithms to support spacecraft operators at the Satellite Control Center (CCS), doing research on Big Data for Satellite Operations.
-Awarded a CAPES scholarship to work full time.
+\descript{| \researchMS}
+\location{\researchMSDur}
+\researchMSDesc
 \sectionsep
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %     PUBLICATIONS
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Publications}
+\section{\publications}
 \vspace{15pt}
 \renewcommand\refname{\vskip -1.5cm} % Couldn't get this working from the .cls file
 \bibliographystyle{ieeetr}
@@ -227,12 +216,12 @@ Awarded a CAPES scholarship to work full time.
 %     AWARDS, volunteer work in my case...
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Volunteer work}
-\begin{tabular}{cp{10cm}}
-2020 & Organizer at the \href{http://www.inpe.br/cubedesign/2020/}{III CubeDesign} competition, co-responsible for the Data Science category\\
-2019 & Organizer at the II CubeDesign competition, responsible for data management and CanSat payload operations\\
-2019 & Organizer at the Workshop of Engineering and Space Technology (WETE) \\
-\end{tabular}
+%\section{Volunteer work}
+%\begin{tabular}{cp{10cm}}
+%2020 & Organizer at the \href{http://www.inpe.br/cubedesign/2020/}{III CubeDesign} competition, co-responsible for the Data Science category\\
+%2019 & Organizer at the II CubeDesign competition, responsible for data management and CanSat payload operations\\
+%2019 & Organizer at the Workshop of Engineering and Space Technology (WETE) \\
+%\end{tabular}
 
 \end{minipage}
 \end{document}
