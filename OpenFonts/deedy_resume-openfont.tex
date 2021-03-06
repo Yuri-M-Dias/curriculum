@@ -67,9 +67,9 @@
 \fancyhf{}
 
 % English translation
-%\input{i18n/cv_en.tex}
+\input{i18n/cv_en.tex}
 % Portuguese translation
-\input{i18n/cv_pt.tex}
+%\input{i18n/cv_pt.tex}
 
 \begin{document}
 
@@ -146,7 +146,9 @@ Rust \textbullet{} VimL \textbullet{} FishShell
 \location{\languagesEN}
 \location{\languagesFR}
 \location{\languagesJP}
-\location{\languagesPT}
+\ifdefined\languagesPT
+  \location{\languagesPT}
+\fi
 
 \section{\coursework}
 \subsection{\courseworkSub}
