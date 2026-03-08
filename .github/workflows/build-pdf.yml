@@ -71,12 +71,12 @@ jobs:
 
 # ── Build ──────────────────────────────────────────────────────────────────────
 # Compile release-quality PDFs, named CV_YuriMatheusDias_XX.pdf.
-# Only runs on push events (not PRs).
+# Runs on all events (push and PRs) so reviewers can download the compiled PDF
+# directly from the PR's "Artifacts" section without merging first.
   build:
     name: Build — ${{ matrix.lang }}
     runs-on: ubuntu-latest
     needs: test
-    if: github.event_name != 'pull_request'
     strategy:
       fail-fast: false
       matrix:
@@ -107,6 +107,89 @@ jobs:
           name: cv-${{ matrix.lang }}
           path: CV_YuriMatheusDias_${{ matrix.lang }}.pdf
           retention-days: 90
+
+# ── LaTeX Diff (PRs only) ───────────────────────────────────────────────────────
+# Generates a visual diff PDF showing what changed vs the base branch.
+# The diff is uploaded as a PR artifact so reviewers can see exactly what text
+# was added (underlined) or removed (struck through) without opening a side-by-side
+# comparison manually.
+#
+# Strategy: both the base-branch and PR versions of the main document are flattened
+# into single self-contained .tex files (i18n \input resolved inline via awk), then
+# latexdiff compares them and produces an annotated document that XeLaTeX compiles.
+  latexdiff:
+    name: Diff — ${{ matrix.lang }}
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.event_name == 'pull_request'
+    strategy:
+      fail-fast: false
+      matrix:
+        lang: [en, pt]
+
+    steps:
+      - name: Checkout PR branch (full history for base comparison)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Prepare flattened documents for latexdiff
+        working-directory: OpenFonts
+        env:
+          CV_LANG: ${{ matrix.lang }}
+        run: |
+          BASE_REF="${{ github.base_ref }}"
+          git fetch origin "$BASE_REF" --depth=1
+
+          # Retrieve the base-branch version of the i18n file.
+          # If it doesn't exist in the base (e.g. new file), fall back to the current
+          # version so latexdiff produces an "all-added" diff rather than failing.
+          git show "origin/${BASE_REF}:OpenFonts/i18n/cv_${CV_LANG}.tex" \
+            > old_i18n.tex 2>/dev/null \
+            || cp "i18n/cv_${CV_LANG}.tex" old_i18n.tex
+
+          # Flatten both versions: replace the \ifdefined\langcode...\fi block in the
+          # main document with the i18n content inlined, producing a complete single
+          # .tex file suitable for latexdiff.
+          flatten() {
+            local i18n_file="$1"
+            local out_file="$2"
+            awk -v f="$i18n_file" '
+              /\\ifdefined\\langcode/ {
+                skip=1
+                while ((getline l < f) > 0) print l
+                close(f)
+                next
+              }
+              skip && /^\\fi/ { skip=0; next }
+              skip            { next }
+              { print }
+            ' deedy_resume-openfont.tex > "$out_file"
+          }
+
+          flatten old_i18n.tex             "cv_flat_old_${CV_LANG}.tex"
+          flatten "i18n/cv_${CV_LANG}.tex" "cv_flat_new_${CV_LANG}.tex"
+
+      - name: Generate diff .tex and compile diff PDF
+        uses: xu-cheng/latex-action@v3
+        with:
+          working_directory: OpenFonts
+          root_file: cv_diff_${{ matrix.lang }}.tex
+          pre_compile: |
+            latexdiff \
+              --type=UNDERLINE \
+              --exclude-safe-cmd=location,descript,runsubsection \
+              "cv_flat_old_${{ matrix.lang }}.tex" \
+              "cv_flat_new_${{ matrix.lang }}.tex" \
+              > "cv_diff_${{ matrix.lang }}.tex"
+
+      - name: Upload diff PDF artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cv-diff-${{ matrix.lang }}
+          path: OpenFonts/cv_diff_${{ matrix.lang }}.pdf
+          retention-days: 30
 
 # ── Release ────────────────────────────────────────────────────────────────────
 # Publishes PDFs to GitHub Releases:

@@ -149,8 +149,19 @@ Workflow: `.github/workflows/build-pdf.yml`
 | Job | Trigger | What it does |
 |-----|---------|--------------|
 | `test` | All events | Compiles each language; fails on any LaTeX error |
-| `build` | Push to `master` or tag | Compiles final PDFs; uploads as 90-day artifacts |
+| `build` | All events (push + PRs) | Compiles final PDFs; uploads as 90-day artifacts — available on PRs too |
+| `latexdiff` | PRs only | Generates a visual diff PDF (additions underlined, deletions struck through) vs the base branch |
 | `release` | Push to `master` or `v*` tag | Publishes PDFs to GitHub Releases |
+
+### Reviewing a Pull Request
+
+When a PR is opened or updated, CI uploads three sets of artifacts visible under the
+**"Artifacts"** section of the Actions run linked from the PR:
+
+- `cv-en` — compiled English CV as it will look after merge
+- `cv-pt` — compiled Portuguese CV as it will look after merge
+- `cv-diff-en` — English diff PDF: new text underlined, removed text struck through
+- `cv-diff-pt` — Portuguese diff PDF (same)
 
 ### Release strategy
 
@@ -161,8 +172,8 @@ Workflow: `.github/workflows/build-pdf.yml`
 
 ### Adding a language to CI
 
-In `.github/workflows/build-pdf.yml`, find the two `matrix:` blocks and add your language
-code to both:
+In `.github/workflows/build-pdf.yml`, find the three `matrix:` blocks (in `test`, `build`,
+and `latexdiff`) and add your language code to all three:
 
 ```yaml
 matrix:
