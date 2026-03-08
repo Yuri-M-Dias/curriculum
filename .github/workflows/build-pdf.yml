@@ -133,7 +133,10 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Prepare flattened documents for latexdiff
+      - name: Install latexdiff
+        run: sudo apt-get install -y latexdiff
+
+      - name: Flatten documents and generate diff .tex
         working-directory: OpenFonts
         env:
           CV_LANG: ${{ matrix.lang }}
@@ -142,15 +145,14 @@ jobs:
           git fetch origin "$BASE_REF" --depth=1
 
           # Retrieve the base-branch version of the i18n file.
-          # If it doesn't exist in the base (e.g. new file), fall back to the current
-          # version so latexdiff produces an "all-added" diff rather than failing.
+          # Falls back to the current version (all-added diff) if this is a new file.
           git show "origin/${BASE_REF}:OpenFonts/i18n/cv_${CV_LANG}.tex" \
             > old_i18n.tex 2>/dev/null \
             || cp "i18n/cv_${CV_LANG}.tex" old_i18n.tex
 
           # Flatten both versions: replace the \ifdefined\langcode...\fi block in the
-          # main document with the i18n content inlined, producing a complete single
-          # .tex file suitable for latexdiff.
+          # main document with the i18n content inlined, producing complete single
+          # .tex files that latexdiff can compare directly.
           flatten() {
             local i18n_file="$1"
             local out_file="$2"
@@ -170,18 +172,19 @@ jobs:
           flatten old_i18n.tex             "cv_flat_old_${CV_LANG}.tex"
           flatten "i18n/cv_${CV_LANG}.tex" "cv_flat_new_${CV_LANG}.tex"
 
-      - name: Generate diff .tex and compile diff PDF
+          # Run latexdiff here on the host (where the file is guaranteed to exist)
+          # so the latex-action step receives an already-generated root_file.
+          latexdiff \
+            --type=UNDERLINE \
+            "cv_flat_old_${CV_LANG}.tex" \
+            "cv_flat_new_${CV_LANG}.tex" \
+            > "cv_diff_${CV_LANG}.tex"
+
+      - name: Compile diff PDF
         uses: xu-cheng/latex-action@v3
         with:
           working_directory: OpenFonts
           root_file: cv_diff_${{ matrix.lang }}.tex
-          pre_compile: |
-            latexdiff \
-              --type=UNDERLINE \
-              --exclude-safe-cmd=location,descript,runsubsection \
-              "cv_flat_old_${{ matrix.lang }}.tex" \
-              "cv_flat_new_${{ matrix.lang }}.tex" \
-              > "cv_diff_${{ matrix.lang }}.tex"
 
       - name: Upload diff PDF artifact
         if: always()
