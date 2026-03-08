@@ -1,0 +1,237 @@
+name: Build and Release CV
+
+on:
+  push:
+    branches: [master]
+    tags: ['v*']
+    paths:
+      - 'OpenFonts/**'
+      - '.github/workflows/build-pdf.yml'
+  pull_request:
+    branches: [master]
+    paths:
+      - 'OpenFonts/**'
+      - '.github/workflows/build-pdf.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+# ── Test ───────────────────────────────────────────────────────────────────────
+# Compile each active language and assert no LaTeX errors.
+# Adding a new language: add its code to the matrix below and create
+# OpenFonts/i18n/cv_XX.tex. No other workflow changes are needed.
+jobs:
+  test:
+    name: Test — ${{ matrix.lang }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        lang: [en, pt]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Generate language wrapper
+        working-directory: OpenFonts
+        run: |
+          printf '\\def\\langcode{%s}\\input{deedy_resume-openfont}\n' \
+            "${{ matrix.lang }}" > cv_test_${{ matrix.lang }}.tex
+
+      - name: Compile CV (${{ matrix.lang }})
+        uses: xu-cheng/latex-action@v3
+        with:
+          working_directory: OpenFonts
+          root_file: cv_test_${{ matrix.lang }}.tex
+
+      - name: Check log for LaTeX errors
+        working-directory: OpenFonts
+        run: |
+          LOG="cv_test_${{ matrix.lang }}.log"
+          if [ ! -f "$LOG" ]; then
+            echo "::error::Log file not found: $LOG"
+            exit 1
+          fi
+          if grep -E "^! |^LaTeX Error:|Emergency stop" "$LOG"; then
+            echo "::error::LaTeX errors found in $LOG"
+            exit 1
+          fi
+          echo "No LaTeX errors found in $LOG."
+
+      - name: Verify PDF was produced
+        working-directory: OpenFonts
+        run: |
+          PDF="cv_test_${{ matrix.lang }}.pdf"
+          [ -f "$PDF" ] || { echo "::error::PDF not found: $PDF"; exit 1; }
+          SIZE=$(wc -c < "$PDF")
+          [ "$SIZE" -gt 10000 ] || { echo "::error::PDF suspiciously small ($SIZE bytes): $PDF"; exit 1; }
+          echo "PDF OK — $SIZE bytes"
+
+# ── Build ──────────────────────────────────────────────────────────────────────
+# Compile release-quality PDFs, named CV_YuriMatheusDias_XX.pdf.
+# Runs on all events (push and PRs) so reviewers can download the compiled PDF
+# directly from the PR's "Artifacts" section without merging first.
+  build:
+    name: Build — ${{ matrix.lang }}
+    runs-on: ubuntu-latest
+    needs: test
+    strategy:
+      fail-fast: false
+      matrix:
+        lang: [en, pt]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Generate language wrapper
+        working-directory: OpenFonts
+        run: |
+          printf '\\def\\langcode{%s}\\input{deedy_resume-openfont}\n' \
+            "${{ matrix.lang }}" > cv_${{ matrix.lang }}.tex
+
+      - name: Compile CV (${{ matrix.lang }})
+        uses: xu-cheng/latex-action@v3
+        with:
+          working_directory: OpenFonts
+          root_file: cv_${{ matrix.lang }}.tex
+
+      - name: Stage PDF as artifact
+        run: cp OpenFonts/cv_${{ matrix.lang }}.pdf CV_YuriMatheusDias_${{ matrix.lang }}.pdf
+
+      - name: Upload PDF artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cv-${{ matrix.lang }}
+          path: CV_YuriMatheusDias_${{ matrix.lang }}.pdf
+          retention-days: 90
+
+# ── LaTeX Diff (PRs only) ───────────────────────────────────────────────────────
+# Generates a visual diff PDF showing what changed vs the base branch.
+# The diff is uploaded as a PR artifact so reviewers can see exactly what text
+# was added (underlined) or removed (struck through) without opening a side-by-side
+# comparison manually.
+#
+# Strategy: both the base-branch and PR versions of the main document are flattened
+# into single self-contained .tex files (i18n \input resolved inline via awk), then
+# latexdiff compares them and produces an annotated document that XeLaTeX compiles.
+  latexdiff:
+    name: Diff — ${{ matrix.lang }}
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.event_name == 'pull_request'
+    strategy:
+      fail-fast: false
+      matrix:
+        lang: [en, pt]
+
+    steps:
+      - name: Checkout PR branch (full history for base comparison)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install latexdiff
+        run: sudo apt-get install -y latexdiff
+
+      - name: Flatten documents and generate diff .tex
+        working-directory: OpenFonts
+        env:
+          CV_LANG: ${{ matrix.lang }}
+        run: |
+          BASE_REF="${{ github.base_ref }}"
+          git fetch origin "$BASE_REF" --depth=1
+
+          # Retrieve the base-branch version of the i18n file.
+          # Falls back to the current version (all-added diff) if this is a new file.
+          git show "origin/${BASE_REF}:OpenFonts/i18n/cv_${CV_LANG}.tex" \
+            > old_i18n.tex 2>/dev/null \
+            || cp "i18n/cv_${CV_LANG}.tex" old_i18n.tex
+
+          # Flatten both versions: replace the \ifdefined\langcode...\fi block in the
+          # main document with the i18n content inlined, producing complete single
+          # .tex files that latexdiff can compare directly.
+          flatten() {
+            local i18n_file="$1"
+            local out_file="$2"
+            awk -v f="$i18n_file" '
+              /\\ifdefined\\langcode/ {
+                skip=1
+                while ((getline l < f) > 0) print l
+                close(f)
+                next
+              }
+              skip && /^\\fi/ { skip=0; next }
+              skip            { next }
+              { print }
+            ' deedy_resume-openfont.tex > "$out_file"
+          }
+
+          flatten old_i18n.tex             "cv_flat_old_${CV_LANG}.tex"
+          flatten "i18n/cv_${CV_LANG}.tex" "cv_flat_new_${CV_LANG}.tex"
+
+          # Run latexdiff here on the host (where the file is guaranteed to exist)
+          # so the latex-action step receives an already-generated root_file.
+          latexdiff \
+            --type=UNDERLINE \
+            "cv_flat_old_${CV_LANG}.tex" \
+            "cv_flat_new_${CV_LANG}.tex" \
+            > "cv_diff_${CV_LANG}.tex"
+
+      - name: Compile diff PDF
+        uses: xu-cheng/latex-action@v3
+        with:
+          working_directory: OpenFonts
+          root_file: cv_diff_${{ matrix.lang }}.tex
+
+      - name: Upload diff PDF artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cv-diff-${{ matrix.lang }}
+          path: OpenFonts/cv_diff_${{ matrix.lang }}.pdf
+          retention-days: 30
+
+# ── Release ────────────────────────────────────────────────────────────────────
+# Publishes PDFs to GitHub Releases:
+#   • Push to master → update the rolling "latest" pre-release
+#   • Push a v* tag  → create a named versioned release
+  release:
+    name: Publish Release
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name != 'pull_request'
+
+    steps:
+      - name: Download all PDF artifacts
+        uses: actions/download-artifact@v4
+        with:
+          merge-multiple: true
+
+      - name: Publish rolling "latest" release
+        if: github.ref == 'refs/heads/master'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: latest
+          name: "Latest CV Build"
+          prerelease: true
+          make_latest: false
+          files: |
+            CV_YuriMatheusDias_en.pdf
+            CV_YuriMatheusDias_pt.pdf
+          body: |
+            Automatically built from the latest commit on `master`.
+
+            **Commit:** `${{ github.sha }}`
+
+      - name: Publish versioned release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          make_latest: true
+          files: |
+            CV_YuriMatheusDias_en.pdf
+            CV_YuriMatheusDias_pt.pdf

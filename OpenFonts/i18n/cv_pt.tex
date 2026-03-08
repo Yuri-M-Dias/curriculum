@@ -1,85 +1,93 @@
-% Portuguese files for translating the CV
+% Conteúdo em Português para o CV
+% Para adicionar um novo rótulo ou item de conteúdo, defina um novo macro \def aqui.
 
-\def \country{Brasil}
-% Name and contact
-\def \education{Educação}
+% Localização
+\def\country{Sofia, Bulgária}
+\def\lastupdatedtext{Última atualização}
 
-% MS
-\def \educationMSName{Msc. Engenharia e Tecnologia\newline Espaciais}
-\def \educationMSLocation{Instituto Nacional de Pesquisas Espaciais}
-\def \educationMSDuration{2018 - Mar 2021 |\newline São José dos Campos}
-\def \educationMSArea{Área: Engenharia e Gerenciamento de Sistemas Espaciais (CSE)}
+% ── Educação ──────────────────────────────────────────────────────────────────
+\def\education{Educação}
 
-% BS
-\def \educationBSName{Engenharia de Software}
-\def \educationBSLocation{Universidade Federal de Goiás (UFG)}
-\def \educationBSDuration{2013-2016 | Goiânia}
+\def\educationMSName{Msc. Engenharia e Tecnologia\newline Espaciais}
+\def\educationMSLocation{Instituto Nacional de Pesquisas Espaciais (INPE)}
+\def\educationMSDuration{2018 – 2021 | São José dos Campos}
+\def\educationMSArea{Engenharia e Gerenciamento de Sistemas Espaciais}
 
-% Skills
-\def \skills{Conhecimentos}
-\def \software{Software}
-\def \softwareProfessional{Experiência Profissional}
-\def \softwareProjects{Projetos}
-\def \softwareHobby{Hobby}
+\def\educationBSName{Engenharia de Software}
+\def\educationBSLocation{Universidade Federal de Goiás (UFG)}
+\def\educationBSDuration{2013 – 2016 | Goiânia}
 
-% Languages
-\def \languages{Línguas}
-\def \languagesEN{Inglês: Fluente, TOEFL IBT 107 @ 2017}
-\def \languagesFR{Francês: Intermediário}
-\def \languagesJP{Japonês: JLPT N5 @ 2019}
-%\def \languagesPT{\smallskip }
+% ── Conhecimentos ─────────────────────────────────────────────────────────────
+\def\skills{Conhecimentos}
 
-% Coursework
-\def \coursework{Matérias}
-\def \courseworkSub{Sistemas Espaciais}
-\def \courses{
-Introdução a Comunicação via Satélite \\
-Conceitos e Sistemas para Operação de Satélites \\
-Sistemas de Dados Espaciais \\
-Algoritmos de Data Science
+\def\domain{Domínio}
+\def\domainList{%
+Operações de Constelação \\
+Sistemas de Controle de Missão \\
+Desenvolvimento de Sistemas de Solo \\
+Missões Espaciais Fim a Fim%
 }
 
-% Professional Experience
-\def \professional{Experiência Profissional}
-\def \professionalSWE{Engenheiro de Software}
-\def \professionalSWEI{Estágio em Engenharia de Software}
-\def \professionalMLDur{Jul 2017 - Jan 2018 | Goiânia, BR}
-\def \professionalMLDesc{
+\def\software{Software}
+\def\softwareProfessional{Profissional}
+\def\softwareProjects{Projetos}
+\def\softwareHobby{Hobby}
+
+\def\skillsProfessionalList{%
+Python \textbullet{} Java \textbullet{} Bash \textbullet{} SQL \\
+Docker \textbullet{} Git \textbullet{} Linux \textbullet{} REST APIs%
+}
+\def\skillsProjectsList{%
+C \textbullet{} C++ \textbullet{} ReactJS \textbullet{} R \textbullet{} \LaTeX%
+}
+\def\skillsHobbyList{%
+Rust \textbullet{} Neovim \textbullet{} Fish Shell%
+}
+
+% ── Línguas ───────────────────────────────────────────────────────────────────
+\def\languages{Línguas}
+\def\languagesEN{Inglês: Fluente — TOEFL IBT 107}
+\def\languagesFR{Francês: Intermediário}
+\def\languagesJP{Japonês: JLPT N5}
+% \languagesPT não é definido na versão PT para evitar listagem redundante
+
+% ── Experiência Profissional ───────────────────────────────────────────────────
+\def\professional{Experiência Profissional}
+
+% EnduroSat — consolidado (Eng. Software → Operador de Missão → Líder Técnico)
+\def\professionalESTitle{Líder Técnico de Operações de Missão}
+\def\professionalESDur{Abr 2021 – Presente | Sofia, BG (Remoto)}
+\def\professionalESDesc{%
 \begin{tightemize}
-\item Pesquisei uma experiência em realidade aumentada (AR) para o museu Casa de Cora Coralina.
-\item Mantive aplicação em Meteor para treinamento do RH da UFG relacionado à conduta ética, utilizando gamificação.
-\end{tightemize}
-}
-\def \professionalFTDur{Abr 2017 - Jun 2017 | Remoto, sede na Noruega}
-\def \professionalFTDesc{
-\begin{tightemize}
-\item Liderei esforços para introduzir práticas TDD e uma estrutura apropriada de testes e integração para a aplicação.
-\item Parte do time full-stack em Ruby on Rails e Angular.
-\end{tightemize}
-}
-\def \professionalZGDur{Set 2016 – Fev 2017 | Goiânia, BR}
-\def \professionalZGDesc{
-\begin{tightemize}
-\item Parte de um dos times da aplicação principal, trabalhando full-stack com Grails.
-\item Liderei uma tentativa inicial de adicionar testes automatizados com Cucumber, Selenium e Docker, com descrição natural utilizando BDD.
-\end{tightemize}
-}
-\def \professionalINDur{Ago 2015 – Ago 2016 | Goiânia, BR}
-\def \professionalINDesc{
-\begin{tightemize}
-\item Trabalhei re-estruturando a aplicação legado para utilizar novas tecnologias e abstrações, na época Spring e Java 8.
-\item Modelagem dos relacionamentos de negócios em UML com o Astah, utilizandos pelo BD e ORM.
-\end{tightemize}
+\item Cresceu de Engenheiro de Software de Segmento de Solo a Operador de Missão a Líder Técnico
+      em quatro anos; atualmente responsável pelas operações de constelação da frota de
+      nanossatélites comerciais da EnduroSat, incluindo controle de missão, resolução de anomalias
+      e decisões sobre o ciclo de vida das espaçonaves.
+\item Desenvolveu software de segmento de solo para processamento de telemetria e monitoramento em
+      tempo real; liderou o desenvolvimento fim a fim de missões espaciais desde a integração até
+      as operações em órbita em múltiplas missões simultâneas.
+\end{tightemize}%
 }
 
-% Research
-\def \research{Pesquisa}
-\def \researchMS{Mestrado}
-\def \researchMSDur{Mar 2018 – Mar 2021 | São José dos Campos}
-\def \researchMSDesc{
-Trabalhando com ferramentas de análise de dados e algoritmos para fornecer suporte aos operadores do Centro de Controle de Satélites (CCS), com pesquisa focada em Big Data para Operação de Satélites.
-Bolsista da CAPES.
+% Cargos anteriores (condensados)
+\def\professionalEarlyTitle{Cargos de Engenharia Anteriores}
+\def\professionalEarlyDur{2015 – 2021 | Brasil e Remoto}
+\def\professionalEarlyDesc{%
+\begin{tightemize}
+\item Engenharia de software na MediaLab/UFG (pesquisa em RA, gamificação) e
+      Fitsmind, Noruega (Ruby on Rails, TDD) — desenvolvimento full-stack em
+      Java, Ruby on Rails, Grails e JavaScript.
+\end{tightemize}%
 }
 
-% Publications
-\def \publications{Publicações}
+% ── Pesquisa ──────────────────────────────────────────────────────────────────
+\def\research{Pesquisa}
+\def\researchMS{Pesquisador de Mestrado}
+\def\researchMSDur{2018 – 2021 | São José dos Campos}
+\def\researchMSDesc{%
+Desenvolveu ferramentas de análise de Big Data e algoritmos para apoio aos
+operadores do Centro de Controle de Satélites (CCS/INPE). Bolsista da CAPES.%
+}
+
+% ── Publicações ───────────────────────────────────────────────────────────────
+\def\publications{Publicações}
