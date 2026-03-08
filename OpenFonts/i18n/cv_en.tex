@@ -1,85 +1,98 @@
-% English files for translating the CV
+% English content for the CV
+% To add a new section label or piece of content, define a new \def macro here.
 
-\def \country{Brazil}
-% Name and contact
-\def \education{Education}
+% Locale
+\def\country{Sofia, Bulgaria}
+\def\lastupdatedtext{Last Updated on}
 
-% MS
-\def \educationMSName{MSc Space Engineering \newline and Technology}
-\def \educationMSLocation{National Institute \newline for Space Research (INPE)}
-\def \educationMSDuration{Mar 2018 - Mar 2021 |\newline São José dos Campos, BR}
-\def \educationMSArea{Area: Space Systems Engineering and Management}
+% ── Education ─────────────────────────────────────────────────────────────────
+\def\education{Education}
 
-% BS
-\def \educationBSName{BS Software Engineering}
-\def \educationBSLocation{Federal University\newline of Goiás (UFG)}
-\def \educationBSDuration{Dec 2016 | Goiânia, BR}
+\def\educationMSName{MSc Space Engineering \newline and Technology}
+\def\educationMSLocation{National Institute \newline for Space Research (INPE)}
+\def\educationMSDuration{2018 – 2021 | São José dos Campos, BR}
+\def\educationMSArea{Space Systems Engineering \& Management}
 
-% Skills
-\def \skills{Skills}
-\def \software{Software}
-\def \softwareProfessional{Professional}
-\def \softwareProjects{Projects}
-\def \softwareHobby{Hobby}
+\def\educationBSName{BS Software Engineering}
+\def\educationBSLocation{Federal University of Goiás (UFG)}
+\def\educationBSDuration{2013 – 2016 | Goiânia, BR}
 
-% Languages
-\def \languages{Languages}
-\def \languagesEN{English: Fluent, TOEFL IBT 107 @ 2017}
-\def \languagesFR{French: Intermediate}
-\def \languagesJP{Japanese: JLPT N5 @ 2019}
-\def \languagesPT{Portuguese: Native}
+% ── Skills ────────────────────────────────────────────────────────────────────
+\def\skills{Skills}
+\def\software{Software}
+\def\softwareProfessional{Professional}
+\def\softwareProjects{Projects}
+\def\softwareHobby{Hobby}
 
-% Coursework
-\def \coursework{Coursework}
-\def \courseworkSub{Space Systems}
-\def \courses{
-Introduction to Satellite Communications \\
-Concepts and Systems for Spacecraft Operations \\
-Space Data Systems \\
-Data Science Algorithms
+\def\skillsProfessionalList{%
+Python \textbullet{} Java \textbullet{} Bash \textbullet{} SQL \\
+Docker \textbullet{} Git \textbullet{} Linux \textbullet{} REST APIs%
+}
+\def\skillsProjectsList{%
+C \textbullet{} C++ \textbullet{} ReactJS \textbullet{} R \textbullet{} \LaTeX%
+}
+\def\skillsHobbyList{%
+Rust \textbullet{} Neovim \textbullet{} Fish Shell%
 }
 
-% Professional Experience
-\def \professional{Professional Experience}
-\def \professionalSWE{Software Engineer}
-\def \professionalSWEI{Software Engineering Intern}
-\def \professionalMLDur{Jul 2017 - Jan 2018 | Goiânia, BR}
-\def \professionalMLDesc{
+% ── Languages ─────────────────────────────────────────────────────────────────
+\def\languages{Languages}
+\def\languagesEN{English: Fluent — TOEFL IBT 107}
+\def\languagesFR{French: Intermediate}
+\def\languagesJP{Japanese: JLPT N5}
+\def\languagesPT{Portuguese: Native}
+
+% ── Professional Experience ───────────────────────────────────────────────────
+\def\professional{Professional Experience}
+
+% EnduroSat – Mission Operations Technical Lead
+\def\professionalESTLTitle{Mission Operations Technical Lead}
+\def\professionalESTLDur{Feb 2025 – Present | Sofia, BG (Remote)}
+\def\professionalESTLDesc{%
 \begin{tightemize}
-\item Researched an Augmented Reality experience for the Cora Coralina Museum.
-\item Continued development of a Meteor application to train UFG HR department on campus' laws using gamification.
-\end{tightemize}
-}
-\def \professionalFTDur{Apr 2017 - Jun 2017 | Remote, based in Norway}
-\def \professionalFTDesc{
-\begin{tightemize}
-\item Lead an effort to add TDD practices and a testing structure for the main application.
-\item Part of the full-stack development team on Ruby on Rails and Angular.
-\end{tightemize}
-}
-\def \professionalZGDur{Sep 2016 – Fev 2017 | Goiânia, BR}
-\def \professionalZGDesc{
-\begin{tightemize}
-\item Part of the development team for one section of the main application, working with Grails and doing full stack work.
-\item Led an effort to update testing for the main application using Cucumber and Selenium, focused on business rules.
-\end{tightemize}
-}
-\def \professionalINDur{Aug 2015 – Aug 2016 | Goiânia, BR}
-\def \professionalINDesc{
-\begin{tightemize}
-\item Worked on updating the accounting application to use newer technologies and abstractions, using Spring and Java 8.
-\item Modeled the business relationships in an UML system (Astah).
-\end{tightemize}
+\item Lead mission operations for a commercial satellite fleet, owning technical standards, procedures, and tooling strategy.
+\item Bridge engineering and operations to drive spacecraft lifecycle decisions and anomaly resolution.
+\item Mentor mission operators and coordinate cross-team efforts across multiple concurrent missions.
+\end{tightemize}%
 }
 
-% Research
-\def \research{Research}
-\def \researchMS{Full Time Master's Student}
-\def \researchMSDur{Mar 2018 – Mar 2021 | São José dos Campos, BR}
-\def \researchMSDesc{
-Worked on Data Analysis tools and algorithms to support spacecraft operators at the Satellite Control Center (CCS), doing research on Big Data for Satellite Operations.
-Awarded a CAPES scholarship.
+% EnduroSat – Mission Operator
+\def\professionalESMOTitle{Mission Operator}
+\def\professionalESMODur{Mar 2023 – Feb 2025 | Sofia, BG (Remote)}
+\def\professionalESMODesc{%
+\begin{tightemize}
+\item Executed satellite mission operations: maneuver planning, payload commanding, and anomaly diagnosis.
+\item Authored and maintained operational runbooks and contingency procedures for mission-critical activities.
+\end{tightemize}%
 }
 
-% Publications
-\def \publications{Publications}
+% EnduroSat – Software Engineer
+\def\professionalESSETitle{Software Engineer}
+\def\professionalESSEDur{Apr 2021 – Mar 2023 | Sofia, BG (Remote)}
+\def\professionalESSEDesc{%
+\begin{tightemize}
+\item Built and maintained ground segment software for satellite telemetry processing and mission planning.
+\item Developed monitoring dashboards and data pipelines for real-time satellite health assessment.
+\end{tightemize}%
+}
+
+% Earlier experience (condensed)
+\def\professionalEarlyTitle{Earlier Experience}
+\def\professionalEarlyDur{2015 – 2021}
+\def\professionalEarlyDesc{%
+\begin{tightemize}
+\item Software engineering roles at MediaLab/UFG, Fitsmind (Norway, remote), ZG Soluções, and i9 Tecnologia — full-stack development across Java, Ruby on Rails, Grails, and JavaScript.
+\end{tightemize}%
+}
+
+% ── Research ──────────────────────────────────────────────────────────────────
+\def\research{Research}
+\def\researchMS{Full-Time Master's Researcher}
+\def\researchMSDur{2018 – 2021 | São José dos Campos, BR}
+\def\researchMSDesc{%
+Developed Big Data analysis tools and algorithms to support operators at Brazil's Satellite Control Center (CCS/INPE).
+CAPES scholarship recipient.%
+}
+
+% ── Publications ──────────────────────────────────────────────────────────────
+\def\publications{Publications}

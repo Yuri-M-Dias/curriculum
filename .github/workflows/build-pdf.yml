@@ -1,67 +1,151 @@
-name: Build PDF
+name: Build and Release CV
 
 on:
   push:
     branches: [master]
+    tags: ['v*']
     paths:
-      - "OpenFonts/**"
-      - "fonts/**"
-      - ".github/workflows/build-pdf.yml"
+      - 'OpenFonts/**'
+      - '.github/workflows/build-pdf.yml'
   pull_request:
     branches: [master]
     paths:
-      - "OpenFonts/**"
-      - "fonts/**"
-      - ".github/workflows/build-pdf.yml"
-  # Allow manual runs from the Actions tab
+      - 'OpenFonts/**'
+      - '.github/workflows/build-pdf.yml'
   workflow_dispatch:
 
+permissions:
+  contents: write
+
+# ── Test ───────────────────────────────────────────────────────────────────────
+# Compile each active language and assert no LaTeX errors.
+# Adding a new language: add its code to the matrix below and create
+# OpenFonts/i18n/cv_XX.tex. No other workflow changes are needed.
 jobs:
-  build:
-    name: Compile CV PDFs
+  test:
+    name: Test — ${{ matrix.lang }}
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        lang: [en, pt]
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # ── Portuguese version (current default in .tex) ─────────────────────
-
-      - name: Compile OpenFonts CV — Portuguese
-        uses: xu-cheng/latex-action@v3
-        with:
-          working_directory: OpenFonts
-          root_file: deedy_resume-openfont.tex
-
-      - name: Copy Portuguese PDF to workspace root
-        run: cp OpenFonts/deedy_resume-openfont.pdf CV_YuriMatheusDias_pt.pdf
-
-      # ── English version (swap \input lines and date command) ─────────────
-
-      - name: Switch source to English
+      - name: Generate language wrapper
+        working-directory: OpenFonts
         run: |
-          sed -i \
-            -e 's|^%\\input{i18n/cv_en.tex}|\\input{i18n/cv_en.tex}|' \
-            -e 's|^\\input{i18n/cv_pt.tex}|%\\input{i18n/cv_pt.tex}|' \
-            -e 's|^\\ultimaatualizacao|\\lastupdated|' \
-            OpenFonts/deedy_resume-openfont.tex
+          printf '\\def\\langcode{%s}\\input{deedy_resume-openfont}\n' \
+            "${{ matrix.lang }}" > cv_test_${{ matrix.lang }}.tex
 
-      - name: Compile OpenFonts CV — English
+      - name: Compile CV (${{ matrix.lang }})
         uses: xu-cheng/latex-action@v3
         with:
           working_directory: OpenFonts
-          root_file: deedy_resume-openfont.tex
+          root_file: cv_test_${{ matrix.lang }}.tex
 
-      - name: Copy English PDF to workspace root
-        run: cp OpenFonts/deedy_resume-openfont.pdf CV_YuriMatheusDias_en.pdf
+      - name: Check log for LaTeX errors
+        working-directory: OpenFonts
+        run: |
+          LOG="cv_test_${{ matrix.lang }}.log"
+          if [ ! -f "$LOG" ]; then
+            echo "::error::Log file not found: $LOG"
+            exit 1
+          fi
+          if grep -E "^! |^LaTeX Error:|Emergency stop" "$LOG"; then
+            echo "::error::LaTeX errors found in $LOG"
+            exit 1
+          fi
+          echo "No LaTeX errors found in $LOG."
 
-      # ── Upload compiled artifacts ─────────────────────────────────────────
+      - name: Verify PDF was produced
+        working-directory: OpenFonts
+        run: |
+          PDF="cv_test_${{ matrix.lang }}.pdf"
+          [ -f "$PDF" ] || { echo "::error::PDF not found: $PDF"; exit 1; }
+          SIZE=$(wc -c < "$PDF")
+          [ "$SIZE" -gt 10000 ] || { echo "::error::PDF suspiciously small ($SIZE bytes): $PDF"; exit 1; }
+          echo "PDF OK — $SIZE bytes"
 
-      - name: Upload CV PDFs
+# ── Build ──────────────────────────────────────────────────────────────────────
+# Compile release-quality PDFs, named CV_YuriMatheusDias_XX.pdf.
+# Only runs on push events (not PRs).
+  build:
+    name: Build — ${{ matrix.lang }}
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.event_name != 'pull_request'
+    strategy:
+      fail-fast: false
+      matrix:
+        lang: [en, pt]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Generate language wrapper
+        working-directory: OpenFonts
+        run: |
+          printf '\\def\\langcode{%s}\\input{deedy_resume-openfont}\n' \
+            "${{ matrix.lang }}" > cv_${{ matrix.lang }}.tex
+
+      - name: Compile CV (${{ matrix.lang }})
+        uses: xu-cheng/latex-action@v3
+        with:
+          working_directory: OpenFonts
+          root_file: cv_${{ matrix.lang }}.tex
+
+      - name: Stage PDF as artifact
+        run: cp OpenFonts/cv_${{ matrix.lang }}.pdf CV_YuriMatheusDias_${{ matrix.lang }}.pdf
+
+      - name: Upload PDF artifact
         uses: actions/upload-artifact@v4
         with:
-          name: CV-PDFs
-          path: |
+          name: cv-${{ matrix.lang }}
+          path: CV_YuriMatheusDias_${{ matrix.lang }}.pdf
+          retention-days: 90
+
+# ── Release ────────────────────────────────────────────────────────────────────
+# Publishes PDFs to GitHub Releases:
+#   • Push to master → update the rolling "latest" pre-release
+#   • Push a v* tag  → create a named versioned release
+  release:
+    name: Publish Release
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name != 'pull_request'
+
+    steps:
+      - name: Download all PDF artifacts
+        uses: actions/download-artifact@v4
+        with:
+          merge-multiple: true
+
+      - name: Publish rolling "latest" release
+        if: github.ref == 'refs/heads/master'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: latest
+          name: "Latest CV Build"
+          prerelease: true
+          make_latest: false
+          files: |
             CV_YuriMatheusDias_en.pdf
             CV_YuriMatheusDias_pt.pdf
-          retention-days: 90
+          body: |
+            Automatically built from the latest commit on `master`.
+
+            **Commit:** `${{ github.sha }}`
+
+      - name: Publish versioned release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          make_latest: true
+          files: |
+            CV_YuriMatheusDias_en.pdf
+            CV_YuriMatheusDias_pt.pdf

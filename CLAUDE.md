@@ -4,15 +4,11 @@ This file helps Claude Code understand the project layout, build commands, and c
 
 ## Project Overview
 
-LaTeX-based bilingual (English/Portuguese) CV for Yuri Matheus Dias Pereira.
-Two templates are maintained in parallel:
+LaTeX-based multilingual CV for Yuri Matheus Dias Pereira, built with the Deedy Resume
+(OpenFonts) template. The active languages are **English** and **Portuguese**; **Bulgarian**
+is a prepared skeleton ready to activate.
 
-| Template | Directory | Fonts | Status |
-|----------|-----------|-------|--------|
-| Deedy Resume (OpenFonts) | `OpenFonts/` | Lato + Raleway (bundled) | **Primary** |
-| Plasmati Graduate CV | `plasmati/` | Fontin (system) | Legacy |
-
-Both templates use **XeLaTeX** and are built with `latexmk`.
+Template directory: `OpenFonts/` — uses Lato + Raleway (bundled), compiled with XeLaTeX.
 
 ---
 
@@ -23,88 +19,96 @@ Both templates use **XeLaTeX** and are built with `latexmk`.
 ```bash
 # Debian/Ubuntu
 sudo apt-get install texlive-xetex texlive-fonts-extra texlive-latex-extra latexmk
-
-# Install Fontin (Plasmati template only)
-./install_fonts.sh
 ```
 
-### Compile OpenFonts CV (primary)
+### Compile a specific language
 
 ```bash
 cd OpenFonts
-latexmk -pdf deedy_resume-openfont.tex
-# Output: deedy_resume-openfont.pdf
+
+# English
+printf '\\def\\langcode{en}\\input{deedy_resume-openfont}\n' > cv_en.tex
+latexmk -pdf cv_en.tex
+# Output: cv_en.pdf
+
+# Portuguese
+printf '\\def\\langcode{pt}\\input{deedy_resume-openfont}\n' > cv_pt.tex
+latexmk -pdf cv_pt.tex
+# Output: cv_pt.pdf
 ```
 
-### Compile Plasmati CV
-
-```bash
-cd plasmati
-latexmk -pdf CV_YuriMatheusDias_01.tex
-# Output: CV_YuriMatheusDias_01.pdf
-```
-
-Both directories have a `.latexmkrc` that configures `xelatex --shell-escape` automatically.
+The `.latexmkrc` in `OpenFonts/` configures `xelatex --shell-escape` automatically.
 
 ---
 
-## Language Switching
+## Adding a New Language
 
-Content is defined in per-template i18n files using `\def` macros.
-Switch languages by editing the main `.tex` file to comment/uncomment the appropriate `\input`.
+1. Create `OpenFonts/i18n/cv_XX.tex` (copy any existing file and translate all `\def` macros).
+   Every file **must** define `\lastupdatedtext` (the "Last Updated" phrase in that language).
+2. Add `XX` to the `lang` matrix in `.github/workflows/build-pdf.yml` under both the `test`
+   and `build` jobs.
+3. That's it — CI will compile, test, and release the new language automatically.
 
-### OpenFonts (`OpenFonts/deedy_resume-openfont.tex`)
+### i18n macro pattern
 
 ```latex
-% Uncomment one:
-%\input{i18n/cv_en.tex}   ← English
-\input{i18n/cv_pt.tex}    ← Portuguese (current default)
+\def\lastupdatedtext{Last Updated on}   % required in every i18n file
+\def\education{Education}
+\def\professional{Professional Experience}
+% ... etc.
 ```
 
-Also swap the "last updated" date command on the following lines:
+### Optional per-language macros (conditionally rendered)
 
 ```latex
-%\lastupdated        ← English
-\ultimaatualizacao   ← Portuguese (current default)
+\def\languagesPT{Portuguese: Native}   % shown only when defined
+\def\languagesBG{Bulgarian: ...}       % shown only when defined
 ```
 
-### Plasmati (`plasmati/CV_YuriMatheusDias_01.tex`)
+---
+
+## Language Architecture
+
+The main document (`OpenFonts/deedy_resume-openfont.tex`) reads `\langcode` to select the
+i18n file at compile time:
 
 ```latex
-% Uncomment one block:
-\selectlanguage{english}
-\input{i18n/cv_en.tex}    ← English (current default)
+\ifdefined\langcode
+  \edef\cvlangfile{i18n/cv_\langcode.tex}
+  \expandafter\input\expandafter{\cvlangfile}
+\else
+  \input{i18n/cv_en.tex}   % default for local compilation without a wrapper
+\fi
+```
 
-%\selectlanguage{brazil}
-%\input{i18n/cv_pt.tex}   ← Portuguese
+CI generates a tiny per-language wrapper that sets `\langcode` before loading the main file:
+
+```
+\def\langcode{en}\input{deedy_resume-openfont}
 ```
 
 ---
 
 ## Editing Content
 
-All user-visible text lives in the i18n files. **Do not edit the main `.tex` files** for content changes.
+All user-visible text lives in the i18n files. **Do not edit the main `.tex` file** for
+content changes — edit only the i18n files.
 
 | File | Purpose |
 |------|---------|
-| `OpenFonts/i18n/cv_en.tex` | OpenFonts – English content |
-| `OpenFonts/i18n/cv_pt.tex` | OpenFonts – Portuguese content |
-| `plasmati/i18n/cv_en.tex` | Plasmati – English content |
-| `plasmati/i18n/cv_pt.tex` | Plasmati – Portuguese content |
-
-Content macros follow this pattern:
-
-```latex
-\def\education{Education}
-\def\professional{Professional Experience}
-```
+| `OpenFonts/i18n/cv_en.tex` | English content |
+| `OpenFonts/i18n/cv_pt.tex` | Portuguese content |
+| `OpenFonts/i18n/cv_bg.tex` | Bulgarian content (skeleton — not yet compiled in CI) |
 
 ---
 
 ## Publications
 
-BibTeX entries for the publications section live in `OpenFonts/publications.bib`.
-Add new entries there; they are rendered with `ieeetr` style via `\bibliography{publications}`.
+BibTeX entries live in `OpenFonts/publications.bib`. Additional research bibliography
+sources are in `bibtex/`. Add new entries to `publications.bib`; they render with the
+`ieeetr` style via `\bibliography{publications}`.
+
+`install_fonts.sh` installs the Fontin font family (kept for potential future use).
 
 ---
 
@@ -114,33 +118,65 @@ Add new entries there; they are rendered with `ieeetr` style via `\bibliography{
 curriculum/
 ├── CLAUDE.md
 ├── README.md
-├── install_fonts.sh          # Installs Fontin font to the system
-├── CV_YuriMatheusDias_en.pdf # Latest compiled EN output
-├── CV_YuriMatheusDias_pt.pdf # Latest compiled PT output
-├── OpenFonts/                # Primary template
-│   ├── deedy_resume-openfont.tex  # Main document (edit language \input here)
-│   ├── deedy-resume-openfont.cls  # Template class (layout/typography)
-│   ├── .latexmkrc                 # Build config: xelatex --shell-escape
-│   ├── publications.bib           # BibTeX references
-│   ├── fonts/lato/                # Bundled Lato font files
-│   ├── fonts/raleway/             # Bundled Raleway font files
+├── install_fonts.sh          # Installs Fontin font (kept for future use)
+├── bibtex/                   # Additional bibliography sources
+│   └── siimi.bib
+├── fonts/fontin/             # Fontin font files (kept for future use)
+├── OpenFonts/                # CV template (Deedy Resume, OpenFonts)
+│   ├── deedy_resume-openfont.tex   # Main document — do not edit content here
+│   ├── deedy-resume-openfont.cls   # Template class (layout, typography)
+│   ├── .latexmkrc                  # Build config: xelatex --shell-escape
+│   ├── publications.bib            # BibTeX publication references
+│   ├── fonts/lato/                 # Bundled Lato font files
+│   ├── fonts/raleway/              # Bundled Raleway font files
 │   └── i18n/
-│       ├── cv_en.tex              # English content macros
-│       └── cv_pt.tex              # Portuguese content macros
-├── plasmati/                 # Legacy template
-│   ├── CV_YuriMatheusDias_01.tex
-│   ├── .latexmkrc
-│   └── i18n/
-│       ├── cv_en.tex
-│       └── cv_pt.tex
-├── fonts/fontin/             # Fontin font files (for Plasmati)
-└── bibtex/                   # Additional bibliography sources
+│       ├── cv_en.tex               # English content macros
+│       ├── cv_pt.tex               # Portuguese content macros
+│       └── cv_bg.tex               # Bulgarian content macros (skeleton)
+└── .github/
+    └── workflows/
+        └── build-pdf.yml           # CI: test → build → release
 ```
 
 ---
 
 ## CI/CD
 
-A GitHub Actions workflow at `.github/workflows/build-pdf.yml` compiles both language
-variants of the OpenFonts template on every push to `master`.
-Compiled PDFs are uploaded as workflow artifacts (retained for 90 days).
+Workflow: `.github/workflows/build-pdf.yml`
+
+### Jobs
+
+| Job | Trigger | What it does |
+|-----|---------|--------------|
+| `test` | All events | Compiles each language; fails on any LaTeX error |
+| `build` | Push to `master` or tag | Compiles final PDFs; uploads as 90-day artifacts |
+| `release` | Push to `master` or `v*` tag | Publishes PDFs to GitHub Releases |
+
+### Release strategy
+
+- **Every push to `master`** → updates the rolling **"Latest CV Build"** pre-release
+  (tag `latest`) with freshly compiled PDFs.
+- **Pushing a `v*` tag** (e.g. `git tag v2.1 && git push origin v2.1`) → creates a
+  permanent versioned GitHub Release with auto-generated release notes.
+
+### Adding a language to CI
+
+In `.github/workflows/build-pdf.yml`, find the two `matrix:` blocks and add your language
+code to both:
+
+```yaml
+matrix:
+  lang: [en, pt, bg]   # ← add new code here
+```
+
+---
+
+## Cutting a Versioned Release
+
+```bash
+git tag v2.1
+git push origin v2.1
+```
+
+GitHub Actions will compile both languages and attach the PDFs to a new GitHub Release
+named `v2.1`.
