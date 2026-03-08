@@ -1,0 +1,67 @@
+name: Build PDF
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - "OpenFonts/**"
+      - "fonts/**"
+      - ".github/workflows/build-pdf.yml"
+  pull_request:
+    branches: [master]
+    paths:
+      - "OpenFonts/**"
+      - "fonts/**"
+      - ".github/workflows/build-pdf.yml"
+  # Allow manual runs from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Compile CV PDFs
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ── Portuguese version (current default in .tex) ─────────────────────
+
+      - name: Compile OpenFonts CV — Portuguese
+        uses: xu-cheng/latex-action@v3
+        with:
+          working_directory: OpenFonts
+          root_file: deedy_resume-openfont.tex
+
+      - name: Copy Portuguese PDF to workspace root
+        run: cp OpenFonts/deedy_resume-openfont.pdf CV_YuriMatheusDias_pt.pdf
+
+      # ── English version (swap \input lines and date command) ─────────────
+
+      - name: Switch source to English
+        run: |
+          sed -i \
+            -e 's|^%\\input{i18n/cv_en.tex}|\\input{i18n/cv_en.tex}|' \
+            -e 's|^\\input{i18n/cv_pt.tex}|%\\input{i18n/cv_pt.tex}|' \
+            -e 's|^\\ultimaatualizacao|\\lastupdated|' \
+            OpenFonts/deedy_resume-openfont.tex
+
+      - name: Compile OpenFonts CV — English
+        uses: xu-cheng/latex-action@v3
+        with:
+          working_directory: OpenFonts
+          root_file: deedy_resume-openfont.tex
+
+      - name: Copy English PDF to workspace root
+        run: cp OpenFonts/deedy_resume-openfont.pdf CV_YuriMatheusDias_en.pdf
+
+      # ── Upload compiled artifacts ─────────────────────────────────────────
+
+      - name: Upload CV PDFs
+        uses: actions/upload-artifact@v4
+        with:
+          name: CV-PDFs
+          path: |
+            CV_YuriMatheusDias_en.pdf
+            CV_YuriMatheusDias_pt.pdf
+          retention-days: 90
